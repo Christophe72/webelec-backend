@@ -23,6 +23,9 @@ import com.webelec.client.service.ClientService;
 
 import jakarta.validation.Valid;
 
+/**
+ * Controleur REST pour la gestion des clients.
+ */
 @RestController
 @RequestMapping("/api/clients")
 public class ClientController {
@@ -33,27 +36,58 @@ public class ClientController {
         this.clientService = clientService;
     }
 
+    /**
+     * Recherche paginee des clients.
+     *
+     * @param search filtre optionnel
+     * @param pageable pagination et tri
+     * @return page de clients
+     */
     @GetMapping
     public Page<ClientResponse> search(@RequestParam(required = false) String search, Pageable pageable) {
         return clientService.search(search, pageable);
     }
 
+    /**
+     * Retourne un client par identifiant.
+     *
+     * @param id identifiant du client
+     * @return client
+     */
     @GetMapping("/{id}")
     public ClientResponse getById(@PathVariable UUID id) {
         return clientService.getById(id);
     }
 
+    /**
+     * Cree un nouveau client.
+     *
+     * @param request donnees de creation
+     * @return client cree
+     */
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     public ClientResponse create(@Valid @RequestBody ClientCreateRequest request) {
         return clientService.create(request);
     }
 
+    /**
+     * Met a jour un client existant.
+     *
+     * @param id identifiant du client
+     * @param request donnees de mise a jour
+     * @return client mis a jour
+     */
     @PutMapping("/{id}")
     public ClientResponse update(@PathVariable UUID id, @Valid @RequestBody ClientUpdateRequest request) {
         return clientService.update(id, request);
     }
 
+    /**
+     * Supprime un client.
+     *
+     * @param id identifiant du client
+     */
     @DeleteMapping("/{id}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
     public void delete(@PathVariable UUID id) {

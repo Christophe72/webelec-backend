@@ -4,6 +4,14 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
+/**
+ * Donnees de creation d'un client.
+ *
+ * @param nom nom du client
+ * @param prenom prenom du client
+ * @param email email du client
+ * @param telephone telephone du client
+ */
 public record ClientCreateRequest(
 
         @NotBlank(message = "Le nom est obligatoire")

@@ -16,6 +16,9 @@ import com.webelec.client.dto.ClientResponse;
 import com.webelec.client.dto.ClientUpdateRequest;
 import com.webelec.repository.ClientRepository;
 
+/**
+ * Service applicatif pour gerer les clients.
+ */
 @Service
 @Transactional
 public class ClientService {
@@ -26,6 +29,12 @@ public class ClientService {
         this.repository = repository;
     }
 
+    /**
+     * Cree un client a partir des donnees de requete.
+     *
+     * @param request donnees de creation
+     * @return client cree
+     */
     public ClientResponse create(ClientCreateRequest request) {
         ClientEntity client = new ClientEntity();
         client.setNom(request.nom());
@@ -38,6 +47,11 @@ public class ClientService {
         return mapToResponse(saved);
     }
 
+    /**
+     * Retourne tous les clients.
+     *
+     * @return liste de clients
+     */
     @Transactional(readOnly = true)
     public List<ClientResponse> findAll() {
         return repository.findAll()
@@ -46,6 +60,13 @@ public class ClientService {
                 .toList();
     }
 
+    /**
+     * Recherche paginee avec filtre optionnel.
+     *
+     * @param query filtre optionnel
+     * @param pageable pagination et tri
+     * @return page de clients
+     */
     @Transactional(readOnly = true)
     public Page<ClientResponse> search(String query, Pageable pageable) {
         Page<ClientEntity> page;
@@ -62,6 +83,12 @@ public class ClientService {
         return page.map(this::mapToResponse);
     }
 
+    /**
+     * Retourne un client par identifiant.
+     *
+     * @param id identifiant du client
+     * @return client
+     */
     @Transactional(readOnly = true)
     public ClientResponse getById(UUID id) {
         ClientEntity client = repository.findById(id)
@@ -69,6 +96,13 @@ public class ClientService {
         return mapToResponse(client);
     }
 
+    /**
+     * Met a jour un client existant.
+     *
+     * @param id identifiant du client
+     * @param request donnees de mise a jour
+     * @return client mis a jour
+     */
     public ClientResponse update(UUID id, ClientUpdateRequest request) {
         ClientEntity client = repository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Client introuvable"));
@@ -82,6 +116,11 @@ public class ClientService {
         return mapToResponse(saved);
     }
 
+    /**
+     * Supprime un client par identifiant.
+     *
+     * @param id identifiant du client
+     */
     public void delete(UUID id) {
         if (!repository.existsById(id)) {
             throw new ResponseStatusException(HttpStatus.NOT_FOUND, "Client introuvable");
@@ -89,6 +128,12 @@ public class ClientService {
         repository.deleteById(id);
     }
 
+    /**
+     * Transforme une entite en DTO de reponse.
+     *
+     * @param client entite a transformer
+     * @return dto de reponse
+     */
     private ClientResponse mapToResponse(ClientEntity client) {
         return new ClientResponse(
                 client.getId(),

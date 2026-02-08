@@ -11,6 +11,9 @@ import jakarta.persistence.Table;
 import java.time.Instant;
 import java.util.UUID;
 
+/**
+ * Entite JPA representant un client.
+ */
 @Entity
 @Table(name = "client")
 public class ClientEntity {
@@ -32,6 +35,9 @@ public class ClientEntity {
     @Column(name = "created_at", nullable = false)
     private Instant createdAt;
 
+    /**
+     * Initialise la date de creation si absente.
+     */
     @PrePersist
     void onCreate() {
         if (createdAt == null) {
